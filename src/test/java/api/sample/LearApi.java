@@ -6,7 +6,7 @@ import static io.restassured.RestAssured.*;
 public class LearApi {
     public static void main(String[] args){
         RestAssured.baseURI ="https://rahulshettyacademy.com";
-        given().log().all().queryParam("key","qaclick123").header("Content-Type","application/json")
+        given().relaxedHTTPSValidation().log().all().queryParam("key","qaclick123").header("Content-Type","application/json")
                 .body("{\n" +
                         "  \"location\": {\n" +
                         "    \"lat\": -38.383494,\n" +
