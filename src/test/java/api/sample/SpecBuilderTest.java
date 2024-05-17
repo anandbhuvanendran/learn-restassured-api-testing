@@ -3,6 +3,11 @@ package api.sample;
 import api.pojo.serialization.AddPlace;
 import api.pojo.serialization.Location;
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -10,9 +15,9 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
-public class SerializeLearning {
+public class SpecBuilderTest {
     @Test
-    public void serializationTest(){
+    public void specBuilderTest(){
         RestAssured.baseURI ="https://rahulshettyacademy.com";
         AddPlace place = new AddPlace();
         place.setAccuracy("50");
@@ -29,10 +34,15 @@ public class SerializeLearning {
         myList.add("shoe park");
         myList.add("shop");
         place.setTypes(myList);
-        String response = given().relaxedHTTPSValidation().queryParam("key","qaclick123").header("Content-Type","application/json")
-                .body(place).log().all()
+
+        //SpecBuilder//
+        RequestSpecification reqSpec = new RequestSpecBuilder().setRelaxedHTTPSValidation().setBaseUri("https://rahulshettyacademy.com").addQueryParam("key","qaclick123")
+                .setContentType(ContentType.JSON).build();
+        ResponseSpecification respSpec = new ResponseSpecBuilder().expectStatusCode(200).expectContentType(ContentType.JSON).build();
+        RequestSpecification response = given().spec(reqSpec);
+                String actualResponse = response.body(place).log().all()
                 .when().post("/maps/api/place/add/json")
-                .then().assertThat().statusCode(200).extract().response().asString();
-        System.out.println(response);
+                .then().spec(respSpec).extract().response().asString();
+        System.out.println(actualResponse);
     }
 }

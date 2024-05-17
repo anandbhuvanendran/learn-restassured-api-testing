@@ -14,7 +14,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
-public class PojoTest {
+public class DeserializationLearningTest {
     @Test
     public void authPojoTest(){
         RestAssured.baseURI = "https://rahulshettyacademy.com";
